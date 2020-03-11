@@ -107,6 +107,26 @@
         -moz-appearance: none;
         -webkit-appearance: none;
       }
+      .loading {
+        position: fixed;
+        top: 0;
+        left: -25%;
+        width: 25%;
+        height: 2px;
+        background: #25283D;
+        opacity: 1;
+        animation: loadingBar 3s infinite;
+        z-index: 10;
+      }
+      .loading.is-disabled {
+        opacity: 0.01;
+        transition: opacity 1000ms ease-in;
+      }
+
+      @keyframes loadingBar {
+        0%   { left: -25%; }
+        100% { left: 100%; }
+      }
 
       @media only screen and (max-width: 780px) {
         #app {
@@ -145,6 +165,9 @@
 
   <body>
     <div id="app">
+      <div
+        v-bind:class="{ 'loading is-disabled': !loading }"
+      ></div>
       <aside>
         <div>
           <h1>
@@ -225,6 +248,7 @@
           top_users: [],
           top_repos: [],
           time: 0,
+          loading: true,
           event_count: 0
         }, 
         mounted() {
@@ -239,6 +263,7 @@
         },
         methods: {
           getStats(event_type) {
+            this.loading = true
             const sql = `
               select 
                 topK(5)(user) top_users,
@@ -256,6 +281,7 @@
               this.top_users = row.top_users
               this.top_repos = row.top_repos
               this.event_count = Intl ? new Intl.NumberFormat().format(row.event_count) : row.event_count
+              this.loading = false
             })
           },
           onChangeType (e) {
