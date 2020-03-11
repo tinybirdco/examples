@@ -68,6 +68,9 @@
         overflow: hidden;
         background: none;
       }
+      .avatar-image {
+        background: #FFF;
+      }
       .avatar:before {
         content: '';
         position: absolute;
@@ -199,6 +202,7 @@
               <a class="item overflow" v-bind:href="'https:/github.com/' + item">
                 <span v-if="avatar" class="avatar mr-1">
                   <img
+                    class="avatar-image"
                     v-bind:src="'https:/github.com/' + item + '.png'"
                     v-bind:title="item"
                     v-bind:alt="item"
