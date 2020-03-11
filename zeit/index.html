@@ -166,7 +166,7 @@
   <body>
     <div id="app">
       <div
-        v-bind:class="{ 'loading is-disabled': !loading }"
+        v-bind:class="['loading ' + (!loading ? 'is-disabled' : '')]"
       ></div>
       <aside>
         <div>
