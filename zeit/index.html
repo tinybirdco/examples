@@ -248,7 +248,7 @@
             `
             this.tinyb.query(sql).then(r => {
               var row = r.data[0]
-              this.time = (r.statistics.elapsed * 10000).toFixed(2)
+              this.time = (r.statistics.elapsed * 1000).toFixed(2)
               this.top_users = row.top_users
               this.top_repos = row.top_repos
               this.event_count = Intl ? new Intl.NumberFormat().format(row.event_count) : row.event_count
