@@ -1,0 +1,84 @@
+
+<html>
+  <head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mini.css/3.0.1/mini-default.min.css">
+  </head>
+
+  <body>
+      <div class="container">
+        <div id="app">
+          <select v-model="selected" @change="onChangeType($event)">
+            <option v-for="option in options" v-bind:value="option.value">
+              {{ option.text }}
+            </option>
+          </select>
+          <h1>number of {{selected}}: {{event_count}}</h1>
+          <list title="top users" v-bind:items="top_users"></list>
+          <list title="top repos" v-bind:items="top_repos"></list>
+        </div>
+      </div>
+
+      <script src='https://cdn.tinybird.co/v1/tinybird.js'></script>
+      <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+      <script>
+
+
+      Vue.component('list', {
+        props: ['items', 'title'],
+        template: `
+        <div>
+          <h2>{{title}}</h2>
+          <ul>
+            <li v-for="item in items" :key="item"> {{item}} </li>
+          </ul>
+        </div>
+        `
+      })
+              
+      var app = new Vue({
+        el: '#app',
+        data: {
+          selected: '',
+          options: [],
+          top_users: [],
+          top_repos: [], 
+          event_count: 0
+        }, 
+        mounted() {
+          this.tinyb = tinybird('p.eyJ1IjogIjI0OTA1NjBmLWJkYTEtNDE0OC1iZmViLTNmYWEzODMzZGEzMyIsICJpZCI6ICIzOGM5OTFjNy1hOWM3LTRjZTMtOGE0Ny0yYjI2NTY4M2I2MzIifQ.SZsRrUuopEMnlYJeuF_3rXWJtUTYuj60IRtIi5on9dE')
+          this.tinyb.query('select distinct(type) t from github_actions').then(r => {
+            this.options = r.data.map(v => { 
+              return { text: v.t, value: v.t } 
+            })
+            this.selected = this.options[0].text
+            this.getStats(this.selected)
+          })
+        },
+        methods: {
+          getStats(event_type) {
+            const sql = `
+              select 
+                topK(10)(user) top_users,
+                topK(10)(repo_name) top_repos, 
+                topK(10)(toDate(created_at)) top_days,
+                count() event_count
+              from github_actions 
+            where type = '${event_type}'
+            `
+            this.tinyb.query(sql).then(r => {
+              var row = r.data[0]
+              this.top_users = row.top_users
+              this.top_repos = row.top_repos
+              this.event_count = row.event_count
+            })
+          },
+          onChangeType (e) {
+                this.getStats(e.target.value)
+          }
+        }
+
+      })
+      </script>
+  </body>
+</html>
+
