@@ -104,6 +104,39 @@
         -moz-appearance: none;
         -webkit-appearance: none;
       }
+
+      @media only screen and (max-width: 780px) {
+        #app {
+          position: relative;
+          height: 100vh;
+          flex-direction: column;
+          overflow: auto;
+          background: linear-gradient(to right, rgba(0, 0, 0, 0.02) 0%, rgba(0, 0, 0, 0.02) 100%);
+        }
+        aside {
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-start;
+          width: 100%;
+          max-width: 380px;
+          height: auto;
+          padding: 20px;
+          background: none;
+        }
+        main {
+          width: 100%;
+          padding: 20px;
+          overflow: initial;
+          box-sizing: border-box;
+          background: none;
+        }
+        .Button {
+          display: none;
+        }
+        h2 {
+          padding-bottom: 8px;
+        }
+      }
     </style>
   </head>
 
