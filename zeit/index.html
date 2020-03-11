@@ -21,7 +21,7 @@
       }
       main {
         width: 100%;
-        padding: 84px 100px;
+        padding: 84px 130px;
         overflow: auto;
         box-sizing: border-box;
         background: linear-gradient(to right, rgba(0, 0, 0, 0.02) 0%, rgba(0, 0, 0, 0.02) 100%);
@@ -35,12 +35,14 @@
         list-style: none;
       }
       li {
+        position: relative;
         width: 320px;
         padding: 0;
         border-bottom: 1px solid #E0E1E4;
       }
       li:last-child { border: none }
       .item {
+        position: relative;
         display: flex;
         align-items: center;
         height: 48px;
@@ -50,17 +52,34 @@
       .item:hover {
         text-decoration: underline;
       }
+      .item-number {
+        position: absolute;
+        left: -20px;
+        top: 50%;
+        transform: translateY(-50%) translateX(-16px);
+        color: #D1D1D6;
+      }
       .avatar {
         position: relative;
         border-radius: 4px;
+        width: 24px;
+        height: 24px;
         overflow: hidden;
         background: none;
+      }
+      .avatar:before {
+        content: '';
+        position: absolute;
+        top: 25%; right: 25%; bottom: 25%; left: 25%;
+        border: 1px solid rgba(63, 65, 84, .16);
+        border-radius: 100%;
       }
       .avatar:after {
         content: '';
         position: absolute;
         top: 0; right: 0; bottom: 0; left: 0;
         border: 1px solid rgba(63, 65, 84, .16);
+        background: none;
         z-index: 2;
       }
       select {
@@ -102,6 +121,7 @@
             This sample application shows top github users and repositories for each event,
             all making use of the <a href="#" class="Link underline as-color--main">Tinybird API</a> and no backend involved.
           </p>
+          <p class="as-font-work--caption as-color--secondary mt-1">Last query was performed in {{time}}ms**</p>
         </div>
         <div>
           <div class="as-font-work--caption as-color--tuna">
@@ -139,12 +159,19 @@
         <div class="mt-6">
           <h2 class="as-font-work--label as-color--tuna pb-1">{{title}}</h2>
           <ul>
-            <li v-for="item in items" :key="item">
-              <a class="item" v-bind:href="'https:/github.com/' + item">
-                <span class="avatar mr-1">
-                  <img v-bind:src="'https:/github.com/' + item + '.png'" v-bind:title="item" v-bind:alt="item" width="24" v-if="avatar" />
+            <li v-for="(item, index) in items" :key="item">
+              <span class="item-number">#{{index + 1}}</span>
+              <a class="item overflow" v-bind:href="'https:/github.com/' + item">
+                <span v-if="avatar" class="avatar mr-1">
+                  <img
+                    v-bind:src="'https:/github.com/' + item + '.png'"
+                    v-bind:title="item"
+                    v-bind:alt="item"
+                    width="24"
+                    onerror="this.style.display='none'"
+                  />
                 </span>
-                <span class="overflow" v-bind:title="item" >{{item}}</span>
+                <span class="overflow" v-bind:title="item">{{item}}</span>
               </a>
             </li>
           </ul>
@@ -158,7 +185,8 @@
           selected: '',
           options: [],
           top_users: [],
-          top_repos: [], 
+          top_repos: [],
+          time: 0,
           event_count: 0
         }, 
         mounted() {
@@ -186,6 +214,7 @@
             `
             this.tinyb.query(sql).then(r => {
               var row = r.data[0]
+              this.time = 100
               this.top_users = row.top_users
               this.top_repos = row.top_repos
               this.event_count = Intl ? new Intl.NumberFormat().format(row.event_count) : row.event_count
