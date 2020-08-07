@@ -1,0 +1,16 @@
+name: CI
+on:
+  schedule:
+    - cron:  '0 11 * * *'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      
+    - name: Upload new COVID data
+      uses: wei/curl@master
+      with:
+        args: -X POST 'https://api.tinybird.co/v0/datasources?url=https%3A%2F%2Fcovid.ourworldindata.org%2Fdata%2Fowid-covid-data.csv&mode=replace&name=owid_covid_data&token=${{ secrets.TOKEN }}'
