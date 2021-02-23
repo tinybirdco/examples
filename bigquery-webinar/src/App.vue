@@ -63,7 +63,7 @@ export default {
     };
   }, 
   mounted() {
-    this.tinyb = window.tinybird(process.env.TOKEN || '')
+    this.tinyb = window.tinybird(process.env.VUE_APP_TOKEN || '')
     this.tinyb.query('select distinct(type) t from github_actions').then(r => {
       this.options = r.data.map(v => { 
         return { text: v.t, value: v.t } 
