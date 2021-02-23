@@ -1,6 +1,5 @@
 <template>
-  <div>
-    <div v-bind:class="['loading ' + (!loading ? 'is-disabled' : '')]"></div>
+  <div id="app">
     <aside>
       <div>
         <h1>
@@ -32,13 +31,9 @@
       <h2 class="as-font--huge as-color--secondary">
         {{event_count}}
       </h2>
-      <select class="as-bkg--main as-font--small" v-model="selected" @change="onChangeType($event)">
-        <option v-for="option in options" v-bind:value="option.value">
-          {{ option.text }}
-        </option>
-      </select>
-      <List title="Top users" v-bind:items="top_users" avatar="true"></List>
-      <List title="Top repos" v-bind:items="top_repos"></List>
+      <List title="Top 10 rank for agents" pipe="dataflow__top_agents" :keys="['position', 'agent', 'total']"></List>
+      <List title="Top 10 rank for clients" pipe="dataflow__top_clients" :keys="['company_country', 'company_name', 'total']"></List>
+      <List title="Top 10 rank for recipients" pipe="dataflow__top_recipients" :keys="['country', 'recipient_code', 'total']"></List>
     </main>
   </div>
 </template>
@@ -60,43 +55,6 @@ export default {
       time: 0,
       loading: true,
       event_count: 0
-    };
-  }, 
-  mounted() {
-    this.tinyb = window.tinybird(process.env.VUE_APP_TOKEN || '')
-    this.tinyb.query('select distinct(type) t from github_actions').then(r => {
-      this.options = r.data.map(v => { 
-        return { text: v.t, value: v.t } 
-      })
-      this.selected = this.options[0].text
-      this.getStats(this.selected)
-    })
-  },
-  methods: {
-    getStats(event_type) {
-      this.loading = true
-      const sql = `
-        select 
-          topK(5)(user) top_users,
-          topK(5)(repo_name) top_repos, 
-          topK(10)(toDate(created_at)) top_days,
-          count() event_count
-        from
-          github_actions 
-        where
-          type = '${event_type}'
-      `
-      this.tinyb.query(sql).then(r => {
-        var row = r.data[0]
-        this.time = (r.statistics.elapsed * 1000).toFixed(2)
-        this.top_users = row.top_users
-        this.top_repos = row.top_repos
-        this.event_count = Intl ? new Intl.NumberFormat().format(row.event_count) : row.event_count
-        this.loading = false
-      })
-    },
-    onChangeType (e) {
-      this.getStats(e.target.value)
     }
   }
 }
@@ -139,92 +97,6 @@ li {
   border-bottom: 1px solid #E0E1E4;
 }
 li:last-child { border: none }
-.item {
-  position: relative;
-  display: flex;
-  align-items: center;
-  height: 48px;
-  color: #000;
-  text-decoration: none;
-}
-.item:hover {
-  text-decoration: underline;
-}
-.item-number {
-  position: absolute;
-  left: -20px;
-  top: 50%;
-  transform: translateY(-50%) translateX(-16px);
-  color: #D1D1D6;
-  cursor: default;
-}
-.avatar {
-  position: relative;
-  border-radius: 4px;
-  width: 24px;
-  height: 24px;
-  overflow: hidden;
-  background: none;
-}
-.avatar-image {
-  background: #FFF;
-}
-.avatar:before {
-  content: '';
-  position: absolute;
-  top: 25%; right: 25%; bottom: 25%; left: 25%;
-  border: 1px solid rgba(63, 65, 84, .16);
-  border-radius: 100%;
-}
-.avatar:after {
-  content: '';
-  position: absolute;
-  top: 0; right: 0; bottom: 0; left: 0;
-  border: 1px solid rgba(63, 65, 84, .16);
-  background: none;
-  border-radius: 4px;
-  z-index: 2;
-}
-select {
-  display: block;
-  width: auto;
-  box-sizing: border-box;
-  height: 32px;
-  margin: 0;
-  padding: 0 32px 0 8px;
-  color: var(--light-color);
-  border: none;
-  border-radius: 4px;
-  background-color: var(--main-color);
-  background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%229%22%20height%3D%226%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M4.1%205.41L0%20.995.745%200%204.1%203.795%207.455%200%208.2.994%204.1%205.41z%22%20fill%3D%22%23fff%22%2F%3E%3C%2Fsvg%3E');
-  background-repeat: no-repeat, repeat;
-  background-position: right .7em top 50%, 0 0;
-  background-size: .65em auto, 100%;
-  outline: none;
-  appearance: none;
-  -moz-appearance: none;
-  -webkit-appearance: none;
-}
-.loading {
-  position: fixed;
-  top: 0;
-  left: -25%;
-  width: 25%;
-  height: 2px;
-  background: #25283D;
-  opacity: 1;
-  animation: loadingBar 3s infinite;
-  z-index: 10;
-}
-.loading.is-disabled {
-  opacity: 0.01;
-  transition: opacity 1000ms ease-in;
-}
-
-@keyframes loadingBar {
-  0%   { left: -25%; }
-  100% { left: 100%; }
-}
 
 @media only screen and (max-width: 780px) {
   #app {
@@ -250,12 +122,6 @@ select {
     overflow: initial;
     box-sizing: border-box;
     background: none;
-  }
-  .Button {
-    min-height: 32px;
-    height: 32px;
-    line-height: 26px;
-    padding: 0 16px;
   }
   h2 {
     padding-bottom: 8px;
