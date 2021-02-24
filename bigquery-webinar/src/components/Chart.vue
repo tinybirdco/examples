@@ -12,6 +12,7 @@ export default {
     return {
       chartOptions: {
         title: {
+          align: 'left',
           text: this.title,
           margin: 50
         },
@@ -21,18 +22,20 @@ export default {
             format: '{value:%b-%e}'
           },
           title: {
-            text: 'Date'
+            text: ''
           }
         },
         yAxis: {
           title: {
-            text: 'Payed'
+            text: ''
           },
           min: 0
         },
         series: [
           {
-            data: []
+            name: '',
+            data: [],
+            color: '#1FCC83'
           }
         ],
         chart: {
@@ -42,6 +45,9 @@ export default {
           background: [{
             backgroundColor: 'red'
           }]
+        },
+        legend: {
+          enabled: false
         }
       }
     };
@@ -83,5 +89,8 @@ export default {
 };
 </script>
 <style>
+.hc { margin-left: -10px }
+.highcharts-title { fill: var(--tuna-color)!important }
 .highcharts-credits { display: none }
+.highcharts-background { fill: transparent }
 </style>
