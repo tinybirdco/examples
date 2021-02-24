@@ -21,7 +21,7 @@ export default {
         title: {
           align: 'left',
           text: this.title,
-          margin: 50
+          margin: 20
         },
         xAxis: {
           type: 'datetime',
@@ -30,7 +30,8 @@ export default {
           },
           title: {
             text: ''
-          }
+          },
+          gridLineWidth: 1
         },
         yAxis: {
           title: {
@@ -71,7 +72,7 @@ export default {
         if (!r.error) {
           this.chartOptions.series[0].data = r.data.map(item => 
             ([
-              Date.UTC(item.x_date.split('-')[0], item.x_date.split('-')[1], item.x_date.split('-')[2]),
+              Date.UTC(item.x_date.split('-')[0], item.x_date.split('-')[1] - 1, item.x_date.split('-')[2]),
               item.b_payed
             ])
           );
