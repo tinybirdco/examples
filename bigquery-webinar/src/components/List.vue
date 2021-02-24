@@ -95,6 +95,4 @@ export default {
   color: #D1D1D6;
   cursor: default;
 }
-.loader {
-}
 </style>

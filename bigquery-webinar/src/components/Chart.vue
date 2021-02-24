@@ -1,5 +1,11 @@
 <template>
   <div class="chart mt-5">
+    <div class="Loader" style="width: 12px; height: 12px" v-if="loading">
+      <div style="border-color: var(--tuna-color) transparent transparent transparent; border-width: 1px"></div>
+      <div style="border-color: var(--tuna-color) transparent transparent transparent; border-width: 1px"></div>
+      <div style="border-color: var(--tuna-color) transparent transparent transparent; border-width: 1px"></div>
+      <div style="border-color: var(--tuna-color) transparent transparent transparent; border-width: 1px"></div>
+    </div>
     <highcharts class="hc" :options="chartOptions" ref="chart"></highcharts>
   </div>
 </template>
@@ -10,6 +16,7 @@ export default {
   props: ['pipe', 'title', 'keys'],
   data() {
     return {
+      loading: false,
       chartOptions: {
         title: {
           align: 'left',
@@ -93,4 +100,10 @@ export default {
 .highcharts-title { fill: var(--tuna-color)!important }
 .highcharts-credits { display: none }
 .highcharts-background { fill: transparent }
+.chart { position: relative }
+.chart .Loader {
+  position: absolute;
+  top: 12px;
+  left: -31px;
+}
 </style>
