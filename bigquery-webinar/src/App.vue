@@ -34,17 +34,20 @@
       <List title="Top 10 rank for agents" pipe="dataflow__top_agents" :keys="['position', 'agent', 'total']"></List>
       <List title="Top 10 rank for clients" pipe="dataflow__top_clients" :keys="['company_country', 'company_name', 'total']"></List>
       <List title="Top 10 rank for recipients" pipe="dataflow__top_recipients" :keys="['country', 'recipient_code', 'total']"></List>
+      <Chart title="Evolution of payments" pipe="dataflow__payments_status__v1"></Chart>
     </main>
   </div>
 </template>
 
 <script>
 import List from './components/List.vue'
+import Chart from "./components/Chart";
 
 export default {
   name: 'app',
   components: {
-    List
+    List,
+    Chart
   },
   data: function() {
     return {
