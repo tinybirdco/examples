@@ -13,28 +13,24 @@
         <p class="as-font--small as-color--secondary mt-3">
           This sample application shows top github users and repositories for each type of event and based on +50M rows, all by making use of the <a href="https://docs.tinybird.co/api-reference/datasource-api.html" class="Link underline as-color--main">Tinybird API</a> and with no backend involved.
         </p>
-        <p class="as-font--caption as-color--secondary mt-1">Last query was performed in {{time}}ms**</p>
       </div>
       <div>
         <div class="as-font--caption as-color--tuna">
-          <p>Take a look at the <a href="https://www.gharchive.org/" class="Link underline as-color--tuna">original datasets</a></p>
           <p class="mt-1">**No intermediate caches involved</p>
         </div>
         <div style="display: inline-block">
-          <a href="https://blog.tinybird.co/2020/03/11/create-analytic-static-applications" class="Button as-bkg--secondary mt-2">
+          <a href="https://tinybird.co" class="Button as-bkg--secondary mt-2">
             <span class="as-font--caption-bold as-color--light">LEARN MORE</span>
           </a>
         </div>
       </div>
     </aside>
     <main>
-      <h2 class="as-font--huge as-color--secondary">
-        {{event_count}}
-      </h2>
+      <Chart title="Evolution of payments" pipe="dataflow__payments_status__v1"></Chart>
+      <Count title="Top Amount" pipe="total_amount"></Count>
       <List title="Top 10 rank for agents" pipe="dataflow__top_agents" :keys="['position', 'agent', 'total']"></List>
       <List title="Top 10 rank for clients" pipe="dataflow__top_clients" :keys="['company_country', 'company_name', 'total']"></List>
       <List title="Top 10 rank for recipients" pipe="dataflow__top_recipients" :keys="['country', 'recipient_code', 'total']"></List>
-      <Chart title="Evolution of payments" pipe="dataflow__payments_status__v1"></Chart>
     </main>
   </div>
 </template>
@@ -42,12 +38,14 @@
 <script>
 import List from './components/List.vue'
 import Chart from "./components/Chart";
+import Count from "./components/Count";
 
 export default {
   name: 'app',
   components: {
     List,
-    Chart
+    Chart,
+    Count
   },
   data: function() {
     return {
