@@ -32,22 +32,17 @@ export default {
   props: ['pipe', 'title', 'keys'],
   data: function (){
     return {
-      polling: null,
       loading: true,
       items: []
     }
   },
   methods: {
-    pollData () {
-      this.polling = setInterval(() => {
-        this.fetchData()
-      }, 5000)
-    },
     fetchData () {
       this.loading = true
       this.tinyb.pipe(this.pipe).json().then(r => {
         if (!r.error) {
           this.items = r.data
+          setTimeout(this.fetchData, 5000)
         } else {
           this.items = []
         }
@@ -56,15 +51,9 @@ export default {
       })
     }
   },
-  created() {
-    this.pollData()
-  },
   mounted() {
     this.tinyb = window.tinybird(process.env.VUE_APP_TOKEN || '')
     this.fetchData()
-  },
-  beforeDestroy () {
-    clearInterval(this.polling)
   }
 }
 </script>

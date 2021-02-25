@@ -61,11 +61,6 @@ export default {
     };
   },
   methods: {
-    pollData () {
-      this.polling = setInterval(() => {
-        this.fetchData()
-      }, 5000)
-    },
     fetchData () {
       this.loading = true
       this.tinyb.pipe(this.pipe).json().then(r => {
@@ -76,6 +71,7 @@ export default {
               item.b_payed
             ])
           );
+          setTimeout(this.fetchData, 5000)
         } else {
           this.chartOptions.series[0].data = [];
         }
@@ -84,15 +80,9 @@ export default {
       })
     }
   },
-  created() {
-    this.pollData()
-  },
   mounted() {
     this.tinyb = window.tinybird(process.env.VUE_APP_TOKEN || '')
     this.fetchData()
-  },
-  beforeDestroy () {
-    clearInterval(this.polling)
   }
 };
 </script>

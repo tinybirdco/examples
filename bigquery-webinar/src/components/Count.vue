@@ -27,7 +27,6 @@ export default {
   props: ['pipe', 'title', 'keys'],
   data: function (){
     return {
-      polling: null,
       loading: true,
       amount: 0
     }
@@ -36,34 +35,24 @@ export default {
     theFormat(number) {
       return number.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
     },
-    pollData () {
-      this.polling = setInterval(() => {
-        this.fetchData()
-      }, 5000)
-    },
     fetchData () {
       this.loading = true
       this.tinyb.pipe(this.pipe).json().then(r => {
         if (!r.error) {
           this.amount = r.data[0].round
-          this.$refs.number.play()
+          setTimeout(this.fetchData, 5000)
         } else {
           this.amount = 0
         }
 
+        this.$refs.number.play()
         this.loading = false
       })
     }
   },
-  created() {
-    this.pollData()
-  },
   mounted() {
     this.tinyb = window.tinybird(process.env.VUE_APP_TOKEN || '')
     this.fetchData()
-  },
-  beforeDestroy () {
-    clearInterval(this.polling)
   }
 }
 </script>
