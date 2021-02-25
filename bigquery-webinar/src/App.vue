@@ -27,7 +27,7 @@
     </aside>
     <main>
       <Chart title="Evolution of payments" pipe="payments_status__v1"></Chart>
-      <Count title="Top Amount" pipe="total_amount"></Count>
+      <Count title="Total Amount" pipe="total_amount"></Count>
       <List title="Top 10 rank for agents" pipe="top_agents" :keys="['position', 'agent', 'total']"></List>
       <List title="Top 10 rank for clients" pipe="top_clients" :keys="['company_country', 'company_name', 'total']"></List>
       <List title="Top 10 rank for recipients" pipe="top_recipients" :keys="['country', 'recipient_code', 'total']"></List>
