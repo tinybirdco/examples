@@ -63,12 +63,15 @@ export default {
   methods: {
     fetchData () {
       this.loading = true
-      this.tinyb.pipe(this.pipe).json().then(r => {
+      this.tinyb.pipe(this.pipe).json({
+        start_date: '2020-01-01',
+        end_date: '2021-02-28'
+      }).then(r => {
         if (!r.error) {
           this.chartOptions.series[0].data = r.data.map(item => 
             ([
-              Date.UTC(item.x_date.split('-')[0], item.x_date.split('-')[1] - 1, item.x_date.split('-')[2]),
-              item.b_payed
+              Date.UTC(item.payment_range.split('-')[0], item.payment_range.split('-')[1] - 1, item.payment_range.split('-')[2]),
+              item.payed
             ])
           );
           setTimeout(this.fetchData, 5000)
