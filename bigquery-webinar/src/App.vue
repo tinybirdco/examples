@@ -11,7 +11,9 @@
           </a>
         </h1>
         <p class="as-font--small as-color--secondary mt-3">
-          This sample application uses Tinybird API endpoints to show real-time evolution of payments, total payments amount and rankings for agents, clients and recipients. The data was initially loaded into Tinybird from BigQuery and incremental data is streamed via Google Dataflow to Tinybird. And no backend app involved! <a href="https://blog.tinybird.co/2021/01/28/real-time-analytics-bigquery-dataflow/">Learn more</a>
+          This sample application uses Tinybird API endpoints to show real-time evolution of payments, total payments amount and rankings for agents, clients and recipients.</p>
+        <p class="as-font--small as-color--secondary mt-3">
+          The data was initially loaded into Tinybird from BigQuery and incremental data is streamed via Google Dataflow to Tinybird. And no backend app involved! <a href="https://blog.tinybird.co/2021/01/28/real-time-analytics-bigquery-dataflow/">Learn more</a>
         </p>
       </div>
       <div>
