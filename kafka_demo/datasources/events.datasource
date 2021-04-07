@@ -1,0 +1,10 @@
+DESCRIPTION Materialized from events_topic
+
+SCHEMA >
+    `timestamp` DateTime,
+    `product_id` String,
+    `user_id` Int64,
+    `event` String,
+    `city` String,
+    `price` Nullable(Float32),
+    `term` Nullable(String)

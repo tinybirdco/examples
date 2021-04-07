@@ -1,0 +1,56 @@
+DESCRIPTION >
+	Endpoint with orders and revenues per day. Parameter options:
+* `start` and `end` to specify time period
+* `start` will return all days since then
+* no parameters - will return last 30 days in dataset
+* `totals_by` (year or month) - will sum up per period
+
+
+NODE results
+SQL >
+
+    %
+    with (SELECT max(day) from orders_per_day) as max_day
+    SELECT 
+      day,
+      countMerge(orders) as orders,
+      sumMerge(revenues) as revenues
+    FROM orders_per_day
+    WHERE toDate(day)
+    {% if defined(start) and defined(end) %}
+     BETWEEN 
+       {{Date(start, description="Start date", required=False)}}
+     AND
+       {{Date(end, description="Start date", required=False)}}
+    {% elif defined(start) %}
+     BETWEEN 
+       {{Date(start)}}
+     AND
+       today()
+    {% else %}
+      > max_day - INTERVAL 30 DAY
+    {% end %}
+    GROUP BY day
+    order by day asc
+
+
+
+NODE totals_endpoint
+SQL >
+
+    %
+    SELECT 
+    {% if defined(totals_by) %}
+      {% if totals_by == 'year' %}
+        toYear(day) as period
+      {% elif totals_by == 'month' %}
+        toYYYYMM(day) as period
+      {% end %}
+    {% else %}
+      day as period
+    {% end %}, sum(orders) as total_orders, sum(revenues) as total_revenues
+     FROM results
+     GROUP BY period
+     order by period asc
+
+

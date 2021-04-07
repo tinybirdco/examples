@@ -1,0 +1,24 @@
+NODE json_extraction
+SQL >
+
+    SELECT 
+      JSONExtractString(message, 'date') as timestamp,
+      JSONExtractString(message, 'product_id') as product_id,
+      JSONExtractInt(message, 'user_id') as user_id,
+      JSONExtractString(message, 'event') as event,
+      JSONExtractString(JSONExtractRaw(message, 'extra_data'),'city') as city,
+      JSONExtract(JSONExtractRaw(message, 'extra_data'),'price','Nullable(Float32)') as price,
+      JSONExtract(JSONExtractRaw(message, 'extra_data'),'term', 'Nullable(String)') as term,
+      message
+    FROM events
+
+
+
+NODE events_pipe_6475_1
+SQL >
+
+    SELECT city, count() c from json_extraction 
+    GROUP BY city
+    order by c desc
+
+

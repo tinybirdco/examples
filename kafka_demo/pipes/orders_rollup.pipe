@@ -1,0 +1,17 @@
+NODE rollup
+SQL >
+
+    SELECT 
+  		toStartOfDay(timestamp) day, 
+  		countState() orders,
+  		sumState(price) revenues
+	FROM events
+	where event = 'buy'
+	GROUP BY day
+	ORDER BY day ASC
+
+TYPE materialized
+DATASOURCE orders_per_day
+ENGINE "AggregatingMergeTree"
+ENGINE_SORTING_KEY "day"
+ENGINE_PARTITION_KEY "toYYYYMM(day)"
