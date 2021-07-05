@@ -1,0 +1,13 @@
+DESCRIPTION >
+    Stores reading temperatures. We store just the last 5 hours.
+
+SCHEMA >
+    `id` String,
+    `room_id` LowCardinality(String),
+    `reading_time` DateTime,
+    `temp` Int,
+    `pos` LowCardinality(String)
+
+ENGINE "MergeTree"
+ENGINE_SORTING_KEY "reading_time"
+ENGINE_TTL "reading_time + INTERVAL 4 HOUR"

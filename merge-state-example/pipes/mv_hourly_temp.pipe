@@ -1,0 +1,16 @@
+DESCRIPTION >
+    Store data aggregated by hour.
+
+NODE prepare_avg
+SQL >
+
+    SELECT 
+        toStartOfHour(reading_time) as reading_time,
+        room_id,
+        pos,
+        avgState(temp) as avg_temp
+    FROM ds_readings
+    GROUP BY reading_time, room_id, pos
+
+TYPE materialized
+DATASOURCE ds_hourly_temp

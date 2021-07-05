@@ -1,0 +1,69 @@
+DESCRIPTION >
+	Here you can check values are correct in all cases even when you use aggregations over aggregations.
+
+
+NODE src_hourly
+DESCRIPTION >
+    Hourly average reading right from the source.
+
+SQL >
+
+    SELECT 
+            toStartOfHour(reading_time) as reading_time,
+            room_id,
+            pos,
+            avg(temp) as avg_temp
+        FROM ds_readings
+        group by reading_time, room_id, pos
+        order by reading_time, room_id, pos
+
+
+
+NODE mv_hourly
+DESCRIPTION >
+    Hourly average reading from materialized data aggregated by hour.
+
+SQL >
+
+    SELECT 
+      reading_time, 
+      room_id, 
+      pos, 
+      avgMerge(avg_temp)
+    FROM ds_hourly_temp
+    group by reading_time, room_id, pos
+    order by reading_time, room_id, pos
+
+
+
+NODE mv_day
+DESCRIPTION >
+    Day aggregated data, reading from the materialized data
+
+SQL >
+
+    SELECT 
+      day,
+      pos,
+      avgMerge(avg_temp) as avg_temp
+    FROM ds_pos_temp
+    group by day, pos
+    order by day, pos
+
+
+
+NODE src_day
+DESCRIPTION >
+    Day aggregated data, reading from the source data.
+
+SQL >
+
+    SELECT 
+      toStartOfDay(reading_time) as day,
+      pos,
+      avg(temp) as avg_temp
+    FROM ds_readings
+    group by day, pos
+    order by day, pos
+
+

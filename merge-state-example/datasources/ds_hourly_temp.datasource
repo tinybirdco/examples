@@ -1,0 +1,13 @@
+DESCRIPTION >
+    Stores average temperatures aggregated by hour. We store just the last two days.
+
+SCHEMA >
+
+    `reading_time` DateTime,
+    `room_id` LowCardinality(String),
+    `pos` LowCardinality(String),
+    `avg_temp` AggregateFunction(avg, Int32)
+
+ENGINE "AggregatingMergeTree"
+ENGINE_SORTING_KEY "reading_time, room_id, pos"
+ENGINE_TTL "reading_time + toIntervalDay(2)"

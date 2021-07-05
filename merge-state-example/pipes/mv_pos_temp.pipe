@@ -1,0 +1,17 @@
+DESCRIPTION >
+    Store data aggregated by day.
+
+NODE prepare_avg
+SQL >
+
+    SELECT 
+        toStartOfDay(reading_time) as day,
+        pos,
+        avgMergeState(avg_temp) as avg_temp
+    FROM ds_hourly_temp
+    GROUP BY day, pos
+
+TYPE materialized
+DATASOURCE ds_pos_temp
+
+
