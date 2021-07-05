@@ -17,6 +17,10 @@ You can find the following pipes:
 - `mv_hourly_temp`: Materializes data from `ds_readings` to `ds_hourly_temp`.
 - `mv_pos_temp`: Materializes data from `ds_hourly_temp` to `ds_pos_temp`. This materialization is very basic. You can do it right from `ds_readings`. However, with more complex use cases you might need to join different tables or make more complex aggregations.
 
+## Endpoint
+
+An example pipe that shows how averages are computed and matches in all cases.
+
 ## How to load data
 
 You can download these files and use them in your Tinybird account. 
