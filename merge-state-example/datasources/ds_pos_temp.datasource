@@ -1,0 +1,11 @@
+DESCRIPTION >
+    Stores average temperatures per position aggregated by day.
+
+SCHEMA >
+
+    `day` DateTime,
+    `pos` LowCardinality(String),
+    `avg_temp` AggregateFunction(avg, Int32)
+
+ENGINE "AggregatingMergeTree"
+ENGINE_SORTING_KEY "day, pos"
