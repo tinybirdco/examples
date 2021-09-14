@@ -1,0 +1,6 @@
+NODE prepare_avg
+SQL >
+
+    SELECT 
+        * 
+    FROM ds_b

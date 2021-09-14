@@ -1,0 +1,8 @@
+
+SCHEMA >
+    `a1` UInt32,
+    `a2` UInt32
+
+ENGINE "MergeTree"
+ENGINE_PARTITION_KEY "a1"
+ENGINE_SORTING_KEY "a1"

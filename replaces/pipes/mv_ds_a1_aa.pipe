@@ -1,0 +1,13 @@
+NODE prepare_avg
+SQL >
+
+    SELECT 
+        a1, 
+        a2, 
+        value,
+        'a1' as type 
+    FROM ds_a
+    left join ds_a1 using a1
+
+TYPE materialized
+DATASOURCE ds_aa

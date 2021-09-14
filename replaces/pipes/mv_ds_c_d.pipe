@@ -1,0 +1,9 @@
+NODE prepare_avg
+SQL >
+
+    SELECT 
+        * 
+    FROM ds_c
+
+TYPE materialized
+DATASOURCE ds_d
