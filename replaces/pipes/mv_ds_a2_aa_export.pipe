@@ -1,0 +1,10 @@
+NODE prepare_avg
+SQL >
+
+    SELECT 
+        a1, 
+        a2, 
+        value,
+        'a2' as type 
+    FROM ds_a
+    left join ds_a2 using a1
