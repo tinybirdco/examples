@@ -11,7 +11,7 @@ It is important to note that at the time of writing the replacement process has 
 
 1. All the data sources involved must share the partition key.
 
-1. The update process is atomic and we are able to properly handle incoming changes during the process if you append data using the URL parameter.
+1. The update process is atomic, however, we are not able to handle incoming changes during the process so if you append data during the replacement process this new data will be discarded.
 
 
 In the following sections, you'll find several examples of how to do replacements to maintain all your data consistent.
