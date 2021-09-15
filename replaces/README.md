@@ -143,12 +143,81 @@ tb datasource replace ds_aa --sql-condition="a1=1 and type = 'a3'" datasources/f
 
 Now, you can check how your data is consistent.
 
-## Automation process
+## Replacement Process
+
+In general, our recommendation is to reduce the depth level if not necessary. If you can't, here are some instructions to make it easier for you.
+
+In order to execute a replacement for some data, you need to have very clear your dependency path. You can get this information in the Tinybird UI, Data Flow, or by selecting one of the data sources from the Advanced Options tab.
+
+Once you have your data flow you need to know that your view dependencies will be updated just for the next level where you do the replacement. If you have more than 2 deep levels you will need to do the replacement more than one time.
+
+![replacement-process](img/replacement-process.png)
+
+In the previous example, you have four data sources in your data flow so you need to do a replace on A and also in C. Remember that you need to extract data from your materialization pipe from B, as you did in [N-level dependencies section](#n-level-dependencies).
+
+### Automation process
 
 The whole process can be automated in static or dynamic ways.
 
-Statically you can get your data flow to analyze the dependencies and check where you need to do the replacements and exports in order to automatize the whole replacement process.
+Statically you can get your data flow to analyze the dependencies and check where you need to do the replacements and exports to automatize the whole replacement process.
 
 The problem with the static solution is that you have to manually adapt the solution each time your data flow changes.
 
 Another option is doing it dynamically. Our API endpoints provide all the required information to dynamically build a dependency graph where you can automatically apply the rules to execute a replacement with success.
+
+In the following code snippet, you have the response of our pipe API.
+
+```sh
+curl --request GET 'https://ui.tinybird.co/v0/pipes/t_486f224f533342589b31cc1476dd8e48' \
+--header 'Authorization: Bearer <TOKEN>'
+```
+
+For each node, you get the list of dependencies. They can be data sources or other nodes. You can combine this response with the list of data sources using the data source API to build your dependency graph.
+
+```json
+
+{
+  "id": "t_1b501ccf34764a69aaf886bac9a7a6d8",
+  "name": "events_per_day",
+  "published_version": "t_5164622050b244338ea2b79c19bd1e57",
+  "published_date": "2019-06-14 10:17:01.201962",
+  "nodes": [
+    {
+      "name": "events_per_day_0",
+      "sql": "select * from app_events",
+      "id": "t_878a81f0e1344a2ca990c8c1aa7dd69f",
+      "dependencies": [
+        "app_events"
+      ],
+      "materialized": false,
+      "created_at": "2019-06-14 10:17:01.201784"
+    },
+    {
+      "name": "events_per_day_1",
+      "sql": "select toDate(date) date, count() event_count from events_per_day_0 group by date",
+      "id": "t_5164622050b244338ea2b79c19bd1e57",
+      "dependencies": [
+        "events_per_day_0"
+      ],
+      "materialized": false,
+      "created_at": "2019-06-14 10:17:01.201943"
+    }
+  ]
+}
+```
+
+You can list your pipes:
+
+```sh
+curl --request GET 'https://ui.tinybird.co/v0/pipes' \
+--header 'Authorization: Bearer <TOKEN>'
+``` 
+
+And get list of your data sources:
+
+```sh
+curl --request GET 'https://ui.tinybird.co/v0/datasources' \
+--header 'Authorization: Bearer <TOKEN>'
+```
+
+You have detailed information about the [datasource APIs](https://docs.tinybird.co/api-reference/datasource-api.html) and [pipe API](https://docs.tinybird.co/api-reference/pipe-api.html).
