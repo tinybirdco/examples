@@ -8,7 +8,6 @@ pip install click
 
 ### Run script
 ```
-cd data-generator
 python3 gen.py --rows 50_000 --total-videos 1_000_000
 ```
 
