@@ -2,10 +2,15 @@
 The script generates a CSV file with 5 columns: _'id','views','likes','dislikes','timestamp'_
 
 ### Install
-`pip install click`
+```
+pip install click
+```
 
 ### Run script
-`python3 gen.py --rows 50_000 --total-videos 1_000_000`
+```
+cd data-generator
+python3 gen.py --rows 50_000 --total-videos 1_000_000
+```
 
 this generates a csv file with 50k rows with ids from 1 to 1.000.000.
 
@@ -16,4 +21,6 @@ the folowing parameters can be specified, although none of them is required.
 - __file-name__: name of the output csv file
 
 ### Help
-run  `python3 gen.py --rows 50_000 --total-videos 1_000_000`  for help
+```
+python3 gen.py --help
+```
