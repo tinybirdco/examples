@@ -1,0 +1,11 @@
+DESCRIPTION Datasource to save video stats
+
+SCHEMA >
+    `id` UInt32,
+    `views` UInt64,
+    `likes` UInt32,
+    `dislikes` UInt32,
+    `timestamp` Datetime
+
+ENGINE MergeTree
+ENGINE_SORTING_KEY id, timestamp

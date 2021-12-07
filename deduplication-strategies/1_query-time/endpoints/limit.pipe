@@ -1,0 +1,7 @@
+NODE limit_endpoint
+
+SQL >
+    SELECT *
+    FROM videos
+    ORDER BY id, timestamp desc
+    LIMIT 1 BY id

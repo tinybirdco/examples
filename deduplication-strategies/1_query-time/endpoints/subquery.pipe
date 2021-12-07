@@ -1,0 +1,15 @@
+NODE subquery_endpoint
+SQL >
+
+    SELECT *
+    FROM videos 
+    WHERE (id, timestamp) IN 
+    (
+        SELECT 
+            id, 
+            max(timestamp)
+        FROM videos 
+        GROUP BY id
+    )
+
+
