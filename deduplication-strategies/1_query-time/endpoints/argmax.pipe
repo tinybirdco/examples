@@ -6,7 +6,7 @@ SQL >
         id, 
         argMax(views, timestamp) views,
         argMax(likes, timestamp) likes,
-    argMax(dislikes, timestamp) dislikes
+        argMax(dislikes, timestamp) dislikes
     FROM videos
     GROUP BY id
     ORDER BY last_timestamp, id

@@ -23,3 +23,7 @@ the folowing parameters can be specified, although none of them is required.
 ```
 python3 gen.py --help
 ```
+
+### Append script
+the script needs to be run from a data-project folder with the tb CLI activated and the correct credentials —the _.tinyb_ file—.
+By default it appends 1000 rows, but feel free to edit but note the [API Limits](https://docs.tinybird.co/api-reference/api-reference.html#limits-title).

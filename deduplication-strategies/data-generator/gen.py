@@ -2,6 +2,7 @@ import datetime
 import csv
 import random
 import click
+import sys
 
 ROWS = 500_000
 TOTAL_VIDEOS = 1_000_000
@@ -38,7 +39,7 @@ def generate_csv(rows, total_videos, file_name):
       likes = int(delta/10 + 10*random.lognormvariate(5,1))
       dislikes = int(delta/100 + random.lognormvariate(5,1)) 
       writer.writerow([id, views, likes, dislikes, timestamp])
-  print (file_name,' generated')
+  print(file_name)
  
 if __name__ == '__main__':
   generate_csv()
