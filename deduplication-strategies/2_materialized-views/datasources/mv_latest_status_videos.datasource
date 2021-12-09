@@ -1,0 +1,11 @@
+DESCRIPTION Datasource to materialize latest status
+
+SCHEMA >
+    `id` UInt32,
+    `views` AggregateFunction(argMax, UInt64, Datetime),
+    `likes` AggregateFunction(argMax, UInt32, Datetime),
+    `dislikes` AggregateFunction(argMax, UInt32, Datetime),
+    `latest_timestamp` AggregateFunction(max, Datetime)
+
+ENGINE AggregatingMergeTree
+ENGINE_SORTING_KEY id

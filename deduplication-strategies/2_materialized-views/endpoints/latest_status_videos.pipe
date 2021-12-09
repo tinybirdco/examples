@@ -1,0 +1,11 @@
+NODE endpoint
+SQL >
+
+    SELECT  
+        id,
+        argMaxMerge(views) views,
+        argMaxMerge(likes) likes,
+        argMaxMerge(dislikes) dislikes,
+        maxMerge(latest_timestamp) timestamp
+    FROM mv_latest_videos
+    GROUP BY id

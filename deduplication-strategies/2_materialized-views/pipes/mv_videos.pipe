@@ -1,0 +1,15 @@
+NODE materialize
+DESCRIPTION >
+    This node gets the rows with the latest date per post_id
+SQL >
+    SELECT 
+        id,
+        argMaxState(views, timestamp) views,
+        argMaxState(likes, timestamp) likes,
+        argMaxState(dislikes, timestamp) dislikes,
+        maxState(timestamp) latest_timestamp
+    FROM videos
+    GROUP BY id
+
+TYPE materialized
+DATASOURCE mv_latest_status_videos
