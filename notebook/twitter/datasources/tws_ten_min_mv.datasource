@@ -1,0 +1,15 @@
+
+SCHEMA >
+    `minute` DateTime,
+    `P` AggregateFunction(sum, UInt8),
+    `Z` AggregateFunction(sum, UInt8),
+    `R` AggregateFunction(sum, UInt8),
+    `U` AggregateFunction(sum, UInt8),
+    `ie` AggregateFunction(sum, UInt8),
+    `yi` AggregateFunction(sum, UInt8),
+    `c` AggregateFunction(count),
+    `RT` AggregateFunction(sum, UInt8),
+    `Percent_RT` Int8
+
+ENGINE "AggregatingMergeTree"
+ENGINE_SORTING_KEY "minute"

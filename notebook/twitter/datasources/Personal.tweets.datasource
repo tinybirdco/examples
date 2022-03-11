@@ -1,0 +1,10 @@
+
+SCHEMA >
+    `date` DateTime,
+    `search_label` String,
+    `tweet` String
+
+ENGINE "MergeTree"
+ENGINE_PARTITION_KEY "toYear(date)"
+ENGINE_SORTING_KEY "date, cityHash64(tweet)"
+ENGINE_SAMPLING_KEY "cityHash64(tweet)"

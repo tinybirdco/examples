@@ -1,0 +1,21 @@
+NODE per_thirty_min
+SQL >
+
+    SELECT
+        toStartOfInterval(date, toIntervalMinute(30)) AS minute,
+        sumState(tweet ILIKE '%Putin%') AS P,
+        sumState(tweet ILIKE '%Zelensky%') AS Z,
+        sumState(tweet ILIKE '%Russia%') AS R,
+        sumState(tweet ILIKE '%Ukraine%') AS U,
+        sumState(tweet ILIKE '%Kiev%') AS ie,
+        sumState(tweet ILIKE '%Kyiv%') AS yi,
+        countState() AS c,
+        sumState(substring(tweet, 1, 3) = 'RT ') AS RT
+    FROM Personal.tweets
+    WHERE minute >= toDateTime('2022-02-27 11:00:00')
+    GROUP BY minute
+
+TYPE materialized
+DATASOURCE tws_thirty_min_mv
+
+
